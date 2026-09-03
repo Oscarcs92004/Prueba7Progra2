@@ -210,7 +210,7 @@ public class EmpleadoManager {
  
         ventasEmpleado.seek(posMes + 8); 
         ventasEmpleado.writeBoolean(true);
-        System.out.printf("Empleado "+nombre +" se le pago Lps. " +total);
+        System.out.println("Empleado "+nombre +" se le pago Lps. " +total);
     }
     
     public void printEmployee(int codigo) throws IOException {
@@ -235,7 +235,7 @@ public class EmpleadoManager {
                 Date fechaCont = new Date(contratacion);
                 Calendar calCont = Calendar.getInstance();
                 calCont.setTime(fechaCont);
-                System.out.printf("Fecha de contratacion: "+calCont.get(Calendar.DAY_OF_MONTH)+"/"+(calCont.get(Calendar.MONTH)+1)+"/"+calCont.get(Calendar.YEAR));
+                System.out.println("Fecha de contratacion: "+calCont.get(Calendar.DAY_OF_MONTH)+"/"+(calCont.get(Calendar.MONTH)+1)+"/"+calCont.get(Calendar.YEAR));
                 break;
             }
         }
