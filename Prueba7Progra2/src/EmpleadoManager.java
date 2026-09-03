@@ -36,6 +36,7 @@ public class EmpleadoManager {
             raiz.mkdir();
             rcods = new RandomAccessFile("Company/codigos.emp","rw");
             remps = new RandomAccessFile("Company/empleados.emp","rw");
+            initCode();
         } catch(IOException e){
             
         }
