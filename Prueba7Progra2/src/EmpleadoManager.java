@@ -50,6 +50,7 @@ public class EmpleadoManager {
         remps.writeLong(Calendar.getInstance().getTimeInMillis());
         remps.writeLong(0);
         //archivos individuales
+        crearFolderEmpleado(codigo);
     }
     
     private String empleadosFolder(int codigo){
@@ -99,4 +100,69 @@ public class EmpleadoManager {
             }
         }
     }
+    
+    public boolean isEmpleadoActivo(int codigo) throws IOException{
+        remps.seek(0);
+        while(remps.getFilePointer() < remps.length()){
+            long inicioCampos = remps.getFilePointer(); 
+            int codigoAux = remps.readInt();
+            remps.readUTF();
+            remps.readDouble();
+            remps.readLong();
+            if(codigoAux == codigo){
+                if(remps.readLong() == 0){
+                    remps.seek(inicioCampos);
+                    remps.readInt();
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+    
+    public boolean fireEmployee(int codigo) throws IOException {
+        remps.seek(0);
+        while (remps.getFilePointer() < remps.length()) {
+            long inicioCampos = remps.getFilePointer(); 
+            int codigoAux = remps.readInt();
+            remps.readUTF();      
+            remps.readDouble();     
+            remps.readLong();       
+            long posDespedido = remps.getFilePointer(); 
+            long despedido = remps.readLong();
+ 
+            if (codigoAux == codigo) {
+                if (despedido != 0) {
+                    return false; 
+                }
+                remps.seek(posDespedido);
+                remps.writeLong(Calendar.getInstance().getTimeInMillis());
+                return true;
+            }
+        }
+        return false; 
+    }
+    
+    public void addSaleToEmployee(int codigo, double monto) throws IOException{
+        if(!isEmpleadoActivo(codigo)){
+            System.out.println("Empleado no encontrado o no activo.");
+            return;
+        }
+        int mes = Calendar.getInstance().get(Calendar.MONTH);
+        long posVentas = (long) mes * 9;
+        
+        RandomAccessFile ventasEmpleado = salesFileFor(codigo);
+        ventasEmpleado.seek(posVentas);
+        double ventasActuales = ventasEmpleado.readDouble();
+        ventasEmpleado.seek(posVentas);
+        ventasEmpleado.writeDouble(ventasActuales + monto);
+    }
+    
+    private RandomAccessFile billsFileFor(int codigo) throws IOException {
+        String dirPadre = empleadosFolder(codigo);
+        String ruta = dirPadre + "/recibos.emp";
+        return new RandomAccessFile(ruta, "rw");
+    }
+    
 }

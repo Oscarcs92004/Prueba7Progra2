@@ -10,7 +10,7 @@
  * @author oscar
  */
 public class EmpleadoMain {
-    static void main(){
+    public static void main(String args[]){
         System.out.println("\n\n==========MENU========== ");
         System.out.println("1. Agregar Empleado");
         System.out.println("Listar Empleado(No Despedidos)");
